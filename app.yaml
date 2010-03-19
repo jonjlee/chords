@@ -1,0 +1,12 @@
+application: chordsheet
+version: 1
+runtime: python
+api_version: 1
+
+handlers:
+- url: /css
+  static_dir: css
+- url: /d/.*
+  script: data.py
+- url: /.*
+  script: ui.py
