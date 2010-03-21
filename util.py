@@ -7,7 +7,7 @@ tpl_path = os.path.dirname(__file__) + "/templates"
 title_to_id_pattern = re.compile('[^A-Za-z0-9-]')
 
 def title_to_id(title):
-    return title_to_id_pattern.sub('-', title)
+    return title_to_id_pattern.sub('-', title).lower()
 
 def login(environ, start_response):
     start_response("302 Found", [('Location', users.create_login_url(environ.get('PATH_INFO','')))])
