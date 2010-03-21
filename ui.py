@@ -18,7 +18,7 @@ def main():
         ('/', {'GET': intro_page})
         ])
 
-    run_wsgi_app(add_auth(s))
+    run_wsgi_app(s)
 
 if __name__ == "__main__":
     main()

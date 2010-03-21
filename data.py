@@ -59,7 +59,6 @@ def main():
 
     s = Selector(mappings, prefix='/d')
 
-    # run_wsgi_app(auth.add_auth(s))
     run_wsgi_app(s)
 
 if __name__ == "__main__":
