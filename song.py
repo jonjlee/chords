@@ -121,7 +121,7 @@ class SongLine:
     CHORDS = "chords"
     LYRICS = "lyrics"
 
-    _CHORD_PATTERN = re.compile('^[0-9A-G#bmsusdiaug/ ]+$')
+    _CHORD_PATTERN = re.compile('^[0-9A-G#bmsusdiaugnj/ ]+$')
 
     def __init__(self, raw_text=""):
         self.type, self.text = self.parse_text(raw_text)
