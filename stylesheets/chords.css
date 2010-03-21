@@ -1,0 +1,21 @@
+body {
+    font-family: Arial, san-serif;
+}
+
+#rawinput tr td {
+    text-align: right;
+    vertical-align: top;
+}
+
+.inputcol {
+    width: 800px;
+}
+
+.songinput {
+    font-family: "Courier New", Courier, monospace;
+    width: 100%;
+}
+
+.metainput {
+    width: 100%;
+}

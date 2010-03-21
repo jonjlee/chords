@@ -1,0 +1,51 @@
+<html>
+    <head>
+        <title>{{ title }}</title>
+        <style><!--
+            body {
+                font-family: "Arial Narrow", Arial, san-serif;
+                padding: .3in .3in .3in .3in;
+                width: 8in;
+            }
+            h1.title {
+                font-size: 24pt;
+                font-weight: bold;
+                text-transform: uppercase;
+                border-bottom: 1px solid gray;
+                text-align: center;
+            }
+            p.subtitle {
+                font-style: italic;
+                text-align: center;
+                position:relative;
+                top:-.7em;
+            }
+            .song p {
+                font-size: 24pt;
+                font-weight: bold;
+                margin: .1em 0px .1em 0px;
+            }
+            .song i.chord {
+                font-size: 12pt;
+                font-weight: bold;
+                font-style: normal;
+                display:inline-block;
+                position:relative;
+                top:-24pt;
+                width:0px;
+                margin-top: 24pt;
+            }
+            .byline {
+                font-size: 8pt;
+                font-weight: bold;
+                margin-top: 8pt;
+            }
+        --></style>
+    </head>
+    <body>
+        <h1 class="title">{{ title }}</h1>
+        <p class="subtitle">{{ subtitle }}</p>
+        <div class="song">{{ song }}</div>
+        <div class="byline">{{ byline }}</div>
+    </body>
+</html>

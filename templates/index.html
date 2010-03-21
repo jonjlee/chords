@@ -1,1 +1,34 @@
-
+<html>
+    <head>
+        <title>Chords</title>
+        <link href="/stylesheets/chords.css" rel="stylesheet" type="text/css"/>
+    </head>
+    <body>
+        <form action="/d/preview" method="post">
+            <table id="rawinput">
+                <tr>
+                    <td>Title:</td>
+                    <td class="inputcol"><input class="metainput" type="text" name="title" /></td>
+                </tr>
+                <tr>
+                    <td>Subtitle:</td>
+                    <td class="inputcol"><textarea class="metainput" wrap="off" rows="1" name="subtitle"></textarea></td>
+                </tr>
+                <tr>
+                    <td>Song:</td>
+                    <td class="inputcol"><textarea class="songinput" wrap="off" rows="45" name="text"></textarea></td>
+                </tr>
+                <tr>
+                    <td>By:</td>
+                    <td class="inputcol"><textarea class="metainput" wrap="off" rows="1" name="byline"></textarea></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="inputcol"><input type="submit" value="Preview"></input></td>
+                </tr>
+            </table>
+        </form>
+        
+        <p><a href="{{ logout_url }}">Logout</a></p>
+    </body>
+</html>
