@@ -7,7 +7,7 @@ from google.appengine.ext.webapp.util import run_wsgi_app
 
 def get_song(environ, start_response):
     id = environ['selector.vars']['id']
-    text, content_type = Songs().read(id, environ['CONTENT_TYPE'])
+    text, content_type = Songs().read(id, environ.get('HTTP_ACCEPT'))
     if text:
         start_response("200 OK", [('Content-type', content_type)])
         return [text]
@@ -30,9 +30,9 @@ def preview_text(environ, start_response):
 def preview_form(environ, start_response):
     req = webob.Request(environ)  
     meta = {
-        'title': req.POST['title'],
-        'subtitle': req.POST['subtitle'],
-        'byline': req.POST['byline']}
+        'title': req.POST['title'].replace(':', '.'),
+        'subtitle': req.POST['subtitle'].replace(':', '.'),
+        'byline': req.POST['byline'].replace(':', '.')}
     lines = [''] + req.POST['text'].split('\r\n')
     song = Song(lines, meta)
 
