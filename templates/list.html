@@ -5,6 +5,7 @@
     </head>
     <body>
         <ul>
+            <li><a href="/">[+]</a></li>
             {% for song in songs %}
             <li><a href="/d/songs/{{ song.id }}">{{ song.title }}</a></li>
             {% endfor %}
