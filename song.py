@@ -1,5 +1,5 @@
 import re
-import formatter
+import songformat
 from google.appengine.ext import db
 
 class SongModel(db.Model):
@@ -17,7 +17,7 @@ class Song:
         self.meta, self.lines = self._parse_raw_lines(text.split("\n"))
 
     def _get_text(self, options={}):
-        return formatter.get_annotated_text(self, options)
+        return songformat.get_annotated_text(self, options)
 
     text = property(_get_text, _set_text)
 
@@ -31,10 +31,10 @@ class Song:
             return self.meta[name]
 
     def get_html(self, options={}):
-        return formatter.get_html(self, options)
+        return songformat.get_html(self, options)
 
     def get_rtf(self, options={}):
-        return formatter.get_rtf(self, options)
+        return songformat.get_rtf(self, options)
     
     def _parse_raw_lines(self, raw_lines, meta={}):
         lines = []
