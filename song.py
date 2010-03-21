@@ -1,13 +1,42 @@
+import logging
 import re
 import songformat
 from google.appengine.ext import db
 
 class SongModel(db.Model):
-    name = db.StringProperty()
-    text = db.StringProperty(multiline=True)
-    author = db.UserProperty()
+    id = db.StringProperty()
+    text = db.TextProperty()
     lastmod = db.DateTimeProperty(auto_now_add=True)
-    meta = db.StringProperty()
+    
+class Songs:
+    def read(self, id, format=None):
+        query = db.GqlQuery("SELECT * FROM SongModel WHERE id = :id", id=id)
+        results = query.fetch(1)
+        
+        if len(results) == 0:
+            return None, None
+        
+        song = Song(results[0].text.split('\n'))
+
+        if (format == 'object'):
+            return song, None
+        elif (format == 'text'):
+            return song.text, "text/plain;annotated=true"
+        elif (format == 'rtf'):
+            return song.get_rtf(), "text/rtf"
+        else:
+            return song.get_html(), "text/html"
+        
+    def write(self, id, song):
+        song_model = SongModel()
+        song_model.id = id
+        song_model.text = song.text
+        song_model.put()
+        
+    def delete(self, id):
+        query = db.GqlQuery("SELECT * FROM SongModel WHERE id = :id", id=id)
+        results = query.fetch(1)
+        db.delete(results)
 
 class Song:
     def __init__(self, lines=[], meta={}):
@@ -40,6 +69,7 @@ class Song:
         lines = []
         
         i = 0
+        prevmetakey = None
         for i,raw_line in enumerate(raw_lines):
             raw_line = raw_line.rstrip("\n")
             if (len(raw_line) == 0):
@@ -47,8 +77,9 @@ class Song:
             nv = raw_line.split(":",1)
             if len(nv) > 1:
                 meta[nv[0].strip().lower()] = nv[1].strip()
-            else:
-                meta[nv[0].strip().lower()] = ''
+                prevmetakey = nv[0].strip().lower()
+            elif prevmetakey != None:
+                meta[prevmetakey] += '\n' + nv[0]
 
         for raw_line in raw_lines[i+1:]:
             raw_line = raw_line.rstrip("\n")
