@@ -18,11 +18,11 @@ class Songs:
         
         song = Song(results[0].text.split('\n'))
 
-        if (format == 'object'):
+        if format == 'object':
             return song, None
-        elif (format == 'text'):
+        elif format.startswith('text/plain'):
             return song.text, "text/plain;annotated=true"
-        elif (format == 'rtf'):
+        elif format.startswith('text/rtf'):
             return song.get_rtf(), "text/rtf"
         else:
             return song.get_html(), "text/html"
