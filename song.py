@@ -1,6 +1,6 @@
-import logging
 import re
 import songformat
+from util import title_to_id
 from google.appengine.ext import db
 
 class SongModel(db.Model):
@@ -9,7 +9,7 @@ class SongModel(db.Model):
     lastmod = db.DateTimeProperty(auto_now_add=True)
     
 class Songs:
-    def read(self, id, format=None):
+    def read(self, id, format="text/html"):
         query = db.GqlQuery("SELECT * FROM SongModel WHERE id = :id", id=id)
         results = query.fetch(1)
         
@@ -49,16 +49,26 @@ class Songs:
         for song in SongModel.all():
             ids.append(song.id)
         return ids
-            
+
+    def getall(self):
+        songs = []
+        
+        for item in SongModel.all():
+            song = Song(item.text.split('\n'), {})
+            song.meta['id'] = item.id
+            songs.append(song)
+
+        return songs
 
 class Song:
-    def __init__(self, lines=[], meta={}):
+    def __init__(self, lines=None, meta=None):
         self.meta, self.lines = self._parse_raw_lines(lines, meta)
     
     def _set_text(self, text):
         self.meta, self.lines = self._parse_raw_lines(text.split("\n"))
 
-    def _get_text(self, options={}):
+    def _get_text(self, options=None):
+        if options == None: options = {}
         return songformat.get_annotated_text(self, options)
 
     text = property(_get_text, _set_text)
@@ -72,15 +82,19 @@ class Song:
         else:
             return self.meta[name]
 
-    def get_html(self, options={}):
+    def get_html(self, options=None):
+        if options == None: options = {}
         return songformat.get_html(self, options)
 
-    def get_rtf(self, options={}):
+    def get_rtf(self, options=None):
+        if options == None: options = {}
         return songformat.get_rtf(self, options)
     
-    def _parse_raw_lines(self, raw_lines, meta={}):
+    def _parse_raw_lines(self, raw_lines, meta):
+        if (raw_lines == None): raw_lines = []
+        if (meta == None): meta = {}
+
         lines = []
-        
         i = 0
         prevmetakey = None
         for i,raw_line in enumerate(raw_lines):
@@ -97,6 +111,9 @@ class Song:
         for raw_line in raw_lines[i+1:]:
             raw_line = raw_line.rstrip("\n")
             lines.append(SongLine(raw_line))
+            
+        if meta.get('id') == None and meta.get('title') != None:
+            meta['id'] = title_to_id(meta['title'])
     
         return meta, lines
 
