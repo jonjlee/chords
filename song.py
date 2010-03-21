@@ -28,8 +28,14 @@ class Songs:
             return song.get_html(), "text/html"
         
     def write(self, id, song):
-        song_model = SongModel()
-        song_model.id = id
+        query = db.GqlQuery("SELECT * FROM SongModel WHERE id = :id", id=id)
+        results = query.fetch(1)
+        if len(results) == 0:
+            song_model = SongModel()
+            song_model.id = id
+        else:
+            song_model = results[0]
+
         song_model.text = song.text
         song_model.put()
         
@@ -37,6 +43,13 @@ class Songs:
         query = db.GqlQuery("SELECT * FROM SongModel WHERE id = :id", id=id)
         results = query.fetch(1)
         db.delete(results)
+    
+    def getids(self):
+        ids = []
+        for song in SongModel.all():
+            ids.append(song.id)
+        return ids
+            
 
 class Song:
     def __init__(self, lines=[], meta={}):

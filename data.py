@@ -53,7 +53,8 @@ def delete_song(environ, start_response):
 
 def list_songs(environ, start_response):
     start_response("200 OK", [('Content-type', 'text/plain')])
-    return ["hello"]
+    ids = map(lambda x: x+'\n', Songs().getids())
+    return ids
 
 
 def main():
