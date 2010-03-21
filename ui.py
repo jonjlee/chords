@@ -17,6 +17,8 @@ def songs_list(environ, start_response):
     songdao = []
     for song in Songs().getall():
         songdao.append({'id': song.meta.get('id'), 'title': song.meta.get('title')})
+    
+    songdao.sort(lambda x,y: cmp(x['title'].lower(), y['title'].lower()))
 
     v = {
         'songs': songdao
