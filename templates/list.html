@@ -1,0 +1,13 @@
+<html>
+    <head>
+        <title>Song List</title>
+        <link href="/stylesheets/chords.css" rel="stylesheet" type="text/css"/>
+    </head>
+    <body>
+        <ul>
+            {% for song in songs %}
+            <li><a href="/d/songs/{{ song.id }}">{{ song.title }}</a></li>
+            {% endfor %}
+        </ul>
+    </body>
+</html>
