@@ -20,16 +20,16 @@ def get_annotated_text(song, options):
 def get_html(song, options):
     LEADING_SPACES = re.compile('^( )+')
     TRAILING_SPACES = re.compile('( )+$')
-    def pad_nbsp(line):
+    def pad_spaces(line, padding):
         if (len(line) == 0):
-            return '&nbsp;'
+            return padding
         spaces = LEADING_SPACES.search(line)
         if (spaces):
-            line = (len(spaces.group()) * '&nbsp;') + line[len(spaces.group()):]
+            line = (len(spaces.group()) * padding) + line[len(spaces.group()):]
         spaces = TRAILING_SPACES.search(line)
         if (spaces):
-            line = line[:-len(spaces.group())] + (len(spaces.group()) * '&nbsp;')
-        return line.replace('\007', '&nbsp')
+            line = line[:-len(spaces.group())] + (len(spaces.group()) * padding)
+        return line.replace('\007', padding)
         
     songtext = ''
     prevline = None
@@ -38,7 +38,7 @@ def get_html(song, options):
             text = ''
             if prevline != None and prevline.type == 'chords':
                 chordline = prevline.text
-                lyricline = line.text
+                lyricline = pad_spaces(line.text, '\007')
                 if (len(chordline) < len(lyricline)):
                     chordline += (len(lyricline) - len(chordline)) * ' '
                 else:
@@ -58,7 +58,10 @@ def get_html(song, options):
             else:
                 text = line.text
 
-            songtext += "<p>" + pad_nbsp(text) + '</p>\n'
+            songtext += "<p>" + pad_spaces(text, '&nbsp;') + '</p>\n'
+
+        elif prevline != None and prevline.type == 'chords' and line.type == 'chords':
+            songtext += '<p><i class="chord" style="top: 0px; margin-top: 0pt;">' + prevline.text.replace(' ', '&nbsp;') + '</i></p>'
 
         prevline = line
     
